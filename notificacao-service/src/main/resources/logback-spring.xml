@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty
+            scope="context"
+            name="APP_NAME"
+            source="spring.application.name"/>
+
+    <springProperty
+            scope="context"
+            name="GRAYLOG_HOST"
+            source="graylog.host"
+            defaultValue="localhost"/>
+
+    <springProperty
+            scope="context"
+            name="GRAYLOG_PORT"
+            source="graylog.port"
+            defaultValue="12201"/>
+
+
+    <!-- CONSOLE -->
+    <appender name="CONSOLE"
+              class="ch.qos.logback.core.ConsoleAppender">
+
+        <encoder>
+            <pattern>
+                %d{HH:mm:ss.SSS} %-5level [${APP_NAME}] [traceId=%X{traceId:-}] [spanId=%X{spanId:-}] %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+
+    </appender>
+
+
+    <!-- GRAYLOG -->
+    <appender name="GELF"
+              class="de.siegmar.logbackgelf.GelfUdpAppender">
+
+        <graylogHost>${GRAYLOG_HOST}</graylogHost>
+        <graylogPort>${GRAYLOG_PORT}</graylogPort>
+
+        <encoder class="de.siegmar.logbackgelf.GelfEncoder">
+
+            <originHost>${APP_NAME}</originHost>
+
+            <includeMdcData>true</includeMdcData>
+
+            <includeKeyValues>true</includeKeyValues>
+
+            <staticField>
+                service:${APP_NAME}
+            </staticField>
+
+        </encoder>
+
+    </appender>
+
+
+    <!-- GRAYLOG ASSÍNCRONO -->
+    <appender name="ASYNC_GELF"
+              class="ch.qos.logback.classic.AsyncAppender">
+
+        <appender-ref ref="GELF"/>
+
+        <neverBlock>true</neverBlock>
+
+    </appender>
+
+
+    <!-- ROOT -->
+    <root level="INFO">
+
+        <appender-ref ref="CONSOLE"/>
+
+        <appender-ref ref="ASYNC_GELF"/>
+
+    </root>
+
+</configuration>

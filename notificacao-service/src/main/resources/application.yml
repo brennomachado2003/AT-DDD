@@ -1,0 +1,52 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: notificacao-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/notificacao_db}
+    username: ${DB_USER:freela}
+    password: ${DB_PASSWORD:freela}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      observation-enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+  tracing:
+    sampling:
+      probability: 1.0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level service=${spring.application.name} thread=%thread logger=%logger{36} - %msg%n"
+  level:
+    root: INFO
+    br.com.freela: INFO
+
+topics:
+  contrato-criado: "contrato-criado"
+  contrato-entregue: "contrato-entregue"
+  contrato-cancelado: "contrato-cancelado"
+  contrato-concluido: "contrato-concluido"
+
+graylog:
+  host: localhost
+  port: 12201
