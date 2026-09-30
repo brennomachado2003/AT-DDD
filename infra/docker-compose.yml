@@ -128,55 +128,6 @@ services:
     ports:
       - "9411:9411"
 
-  postgresql:
-    image: postgres:16
-    container_name: temporal-postgresql
-
-    environment:
-      POSTGRES_USER: temporal
-      POSTGRES_PASSWORD: temporal
-
-    ports:
-      - "5439:5432"
-
-    volumes:
-      - temporal-postgres-data:/var/lib/postgresql/data
-
-    networks: [freela-net]
-
-  temporal:
-      image: temporalio/auto-setup:latest
-      container_name: temporal
-
-      depends_on:
-        - postgresql
-
-      environment:
-        DB: postgres12
-        DB_PORT: 5432
-        POSTGRES_USER: temporal
-        POSTGRES_PWD: temporal
-        POSTGRES_SEEDS: postgresql
-
-      ports:
-        - "7233:7233"
-
-      networks: [freela-net]
-
-  temporal-ui:
-    image: temporalio/ui:latest
-    container_name: temporal-ui
-
-    depends_on:
-      - temporal
-
-    environment:
-      TEMPORAL_ADDRESS: temporal:7233
-
-    ports:
-      - "28081:8080"
-
-    networks: [freela-net]
 
 
 volumes:
@@ -185,7 +136,6 @@ volumes:
   mongodb_config:
   graylog_datanode:
   graylog_data:
-  temporal-postgres-data:
 
 networks:
   freela-net:

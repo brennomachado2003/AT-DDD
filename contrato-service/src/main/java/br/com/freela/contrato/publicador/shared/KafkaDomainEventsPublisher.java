@@ -51,7 +51,7 @@ public class KafkaDomainEventsPublisher implements DomainEventPublisher {
                     contrato.valor(),
                     contrato.eventType()
             );
-            kafkaTemplate.send(contratoCriadoTopic, contrato.eventId().toString(), mensagem);
+            kafkaTemplate.send(contratoCriadoTopic, contrato.contratoId().toString(), mensagem);
         }
         if (evento instanceof ContratoEntregue contrato) {
             var mensagem = new ContratoKafka(
@@ -64,7 +64,7 @@ public class KafkaDomainEventsPublisher implements DomainEventPublisher {
                     contrato.valor(),
                     contrato.eventType()
             );
-            kafkaTemplate.send(contratoEntregueTopic, contrato.eventId().toString(), mensagem);
+            kafkaTemplate.send(contratoEntregueTopic, contrato.contratoId().toString(), mensagem);
         }
         if (evento instanceof ContratoCancelado contrato) {
 
@@ -78,7 +78,7 @@ public class KafkaDomainEventsPublisher implements DomainEventPublisher {
                     contrato.valor(),
                     contrato.eventType()
             );
-            kafkaTemplate.send(contratoCanceladoTopic, contrato.eventId().toString(), mensagem);
+            kafkaTemplate.send(contratoCanceladoTopic, contrato.contratoId().toString(), mensagem);
         }
         if (evento instanceof ContratoConcluido contrato) {
             var mensagem = new ContratoKafka(
@@ -91,7 +91,7 @@ public class KafkaDomainEventsPublisher implements DomainEventPublisher {
                     contrato.valor(),
                     contrato.eventType()
             );
-            kafkaTemplate.send(contratoConcluidoTopic, contrato.eventId().toString(), mensagem);
+            kafkaTemplate.send(contratoConcluidoTopic, contrato.contratoId().toString(), mensagem);
         }
     }
 }

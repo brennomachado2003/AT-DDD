@@ -1,18 +1,6 @@
 server:
   port: 8084
 spring:
-
-  temporal:
-    namespace: default
-    connection:
-      target: localhost:7233
-    workers:
-      - task-queue: freela-net
-    workers-auto-discovery:
-      enabled: true
-      workflow-packages:
-        - br.com.freela.auditoria.infrastructure.temporal.workflow;
-
   application:
     name: auditoria-service
   datasource:
@@ -28,6 +16,11 @@ spring:
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
     listener:
       observation-enabled: true
 management:
